@@ -82,23 +82,23 @@ import java.io.IOException;
 %function nextToken
 %type Token
 
-signo   = [+-]
 digitos = [0-9]
+signo   = [+-]
 punto = \.
-exponente = [eE]{signo}?{digitos}
-number = {digitos}+({punto}?{digitos}*)?({exponente})?
+exponente = [eE]{signo}?{digitos}+
+number = {digitos}+({punto}?{digitos}+)?({exponente})?
+
 SEMI = ";" 
-WHITE = (" "|\t|\n)
-PLUS = \+
-MINUS = \-
-MULT = \*
-DIV = /
-MOD = %
+WHITE = [ \t\n\r]
+PLUS = "+"
+MINUS = "-"
+MULT = "*"
+DIV = "/"
+MOD = "%"
 EXP = "^"
-PARENL = \(
-PARENR = \)
-ERROR = "Illegal character"
-UNARY = \~
+PARENL = "("
+PARENR = ")"
+UNARY = "~"
 
 
 %%
@@ -123,12 +123,9 @@ UNARY = \~
 
 <YYINITIAL>{PARENR}   { return new Token(Token.RPAREN);  }
 
-
-<YYINITIAL>{ERROR} { return new Token(Token.ERROR); }
-
 <YYINITIAL>{UNARY}   { return new Token(Token.UNARY);  }
 
-<YYINITIAL>{WHITE}  { /* NO HACER NADA */             }
+<YYINITIAL>{WHITE}+  { /* NO HACER NADA */ }
 
 <YYINITIAL>.        { return new Token(Token.ERROR);
                       /* todo lo demas es ERROR */ }
